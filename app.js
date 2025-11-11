@@ -1,23 +1,12 @@
 var port = process.env.PORT || 3000,
     http = require('http'),
-    fs = require('fs');
+    fs = require('fs'),
+    html = fs.readFileSync('index.html');
 
-// نقرأ ملف الـ HTML
-var html = fs.readFileSync('index.html', 'utf8');
-
-// نقرأ المتغير البيئي من بيئة بينزتالك
-// (بدّله باسم المتغير اللي أنت حطيته في الـ console)
-var myEnvVar = process.env.talal || 'Default value';
-
-// نستبدل الـ placeholder في الـ HTML بقيمة المتغير
-html = html.replace('/*PLACEHOLDER_TALAL*/', 'document.write("' + myEnvVar + '")');
-
-// دالة لكتابة اللوق
 var log = function(entry) {
     fs.appendFileSync('/tmp/sample-app.log', new Date().toISOString() + ' - ' + entry + '\n');
 };
 
-// السيرفر الأساسي
 var server = http.createServer(function (req, res) {
     if (req.method === 'POST') {
         var body = '';
@@ -29,16 +18,15 @@ var server = http.createServer(function (req, res) {
         req.on('end', function() {
             if (req.url === '/') {
                 log('Received message: ' + body);
-            } else if (req.url === '/scheduled') { // هنا كان فيه خطأ بسيط، استخدمنا = بدل ===
-                log('Received task ' + req.headers['x-aws-sqsd-taskname'] + 
-                    ' scheduled at ' + req.headers['x-aws-sqsd-scheduled-at']);
+            } else if (req.url = '/scheduled') {
+                log('Received task ' + req.headers['x-aws-sqsd-taskname'] + ' scheduled at ' + req.headers['x-aws-sqsd-scheduled-at']);
             }
 
             res.writeHead(200, 'OK', {'Content-Type': 'text/plain'});
             res.end();
         });
     } else {
-        res.writeHead(200, {'Content-Type': 'text/html'});
+        res.writeHead(200);
         res.write(html);
         res.end();
     }
