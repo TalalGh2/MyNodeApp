@@ -7,7 +7,7 @@ var html = fs.readFileSync('index.html', 'utf8');
 
 // نقرأ المتغير البيئي من بيئة بينزتالك
 // (بدّله باسم المتغير اللي أنت حطيته في الـ console)
-var myEnvVar = process.env.TALAL || 'Default value';
+var myEnvVar = process.env.talal || 'Default value';
 
 // نستبدل الـ placeholder في الـ HTML بقيمة المتغير
 html = html.replace('/*PLACEHOLDER_TALAL*/', 'document.write("' + myEnvVar + '")');
